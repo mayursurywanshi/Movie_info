@@ -1,3 +1,5 @@
+import { useTitle } from "../hooks/useTitle";
+
 const contactLinks = [
   {
     name: "Instagram",
@@ -52,6 +54,8 @@ const ContactIcon = ({ name }) => {
 };
 
 export const Contact = () => {
+  useTitle("Contact Us");
+
   return (
     <main className="contact-page flex items-center justify-center px-1 py-8 sm:px-4 sm:py-12 lg:py-16">
       <section className="w-full max-w-5xl rounded-2xl border border-gray-200 bg-white p-4 shadow-lg dark:border-gray-700 dark:bg-gray-800 sm:p-8 lg:p-10">
