@@ -1,0 +1,66 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+main{
+    max-width: 1280px;
+    margin: auto;
+    min-height: 90vh;
+    padding: 10px;
+}
+
+/* Indian tricolor theme */
+.tricolor body {
+    color: #1f2937;
+    background: linear-gradient(to top left, rgba(255, 153, 51, 0.2) 0 30%, #ffffff 48% 62%, rgba(19, 136, 8, 0.18) 80% 100%);
+    background-attachment: fixed;
+}
+
+.tricolor nav {
+    background: linear-gradient(to top left, rgba(255, 153, 51, 0.25), #ffffff 50%, rgba(19, 136, 8, 0.22));
+    border-bottom-color: #000080;
+}
+
+.tricolor nav a[aria-current="page"] {
+    color: #000080;
+}
+
+.tricolor .movie-card {
+    background: linear-gradient(to top left, rgba(214, 128, 43, 0.36), rgba(245, 245, 245, 0.98) 50%, rgba(16, 114, 7, 0.32));
+    border-color: rgba(0, 0, 108, 0.45);
+    box-shadow: 0 4px 12px rgba(0, 0, 108, 0.2);
+}
+
+.tricolor .movie-card h5 {
+    color: #00006b;
+}
+
+.tricolor .movie-card p {
+    color: #374151;
+}
+
+.tricolor .tricolor-toggle {
+    border-color: #000080;
+    box-shadow: 0 0 0 2px rgba(0, 0, 128, 0.2);
+}
+
+.tricolor-white-band {
+    position: relative;
+}
+
+.tricolor-white-band::after {
+    content: "";
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    left: 50%;
+    top: 50%;
+    border: 1px solid #000080;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.tricolor footer {
+    background: linear-gradient(to top left, rgba(255, 153, 51, 0.22), #ffffff 50%, rgba(19, 136, 8, 0.2));
+    border-top: 1px solid rgba(0, 0, 128, 0.25);
+}
