@@ -1,17 +1,28 @@
 import { useEffect } from "react";
 import { useState } from "react";
-import { Link, NavLink, useNavigate } from "react-router-dom";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { AuthModal } from "./AuthModal";
+
+const authPaths = {
+  choice: "/account",
+  signup: "/signup",
+  login: "/login",
+};
+
+const authModes = Object.fromEntries(
+  Object.entries(authPaths).map(([mode, path]) => [path, mode]),
+);
 
 export const Header = () => {
   const [hidden, setHidden] = useState(true);
-  const [authModalMode, setAuthModalMode] = useState(null);
   const [theme, setTheme] = useState(() => {
     const savedTheme = localStorage.getItem("theme");
     if (savedTheme) return savedTheme;
     return JSON.parse(localStorage.getItem("darkMode")) ? "dark" : "light";
   });
+  const location = useLocation();
   const navigate = useNavigate();
+  const authModalMode = authModes[location.pathname] || null;
 
   useEffect(() => {
     localStorage.setItem("theme", theme);
@@ -41,6 +52,25 @@ export const Header = () => {
     return navigate(`/search?q=${queryTerm}`);
   };
 
+  const openAuthentication = () => {
+    navigate(authPaths.choice, {
+      state: { backgroundPath: location.pathname },
+    });
+  };
+
+  const changeAuthenticationMode = (mode, message = "") => {
+    navigate(authPaths[mode], {
+      state: {
+        ...location.state,
+        authMessage: message,
+      },
+    });
+  };
+
+  const closeAuthentication = () => {
+    navigate(location.state?.backgroundPath || "/", { replace: true });
+  };
+
   return (
     <header>
       <nav className="bg-white border-b-2 border-gray-200 px-2 sm:px-4 py-2 dark:bg-gray-900 dark:border-b-1 dark:border-gray-900">
@@ -59,7 +89,7 @@ export const Header = () => {
           <div id="mobile-nav" className="flex lg:order-2">
             <button
               type="button"
-              onClick={() => setAuthModalMode("choice")}
+              onClick={openAuthentication}
               className="mr-2 inline-flex h-[42px] items-center rounded-lg bg-blue-700 px-4 text-sm font-medium text-white hover:bg-blue-800"
             >
               Sign in
@@ -268,9 +298,10 @@ export const Header = () => {
       </nav>
       <AuthModal
         mode={authModalMode}
-        onClose={() => setAuthModalMode(null)}
-        onModeChange={setAuthModalMode}
-        onLoginSuccess={() => setAuthModalMode(null)}
+        message={location.state?.authMessage || ""}
+        onClose={closeAuthentication}
+        onModeChange={changeAuthenticationMode}
+        onLoginSuccess={closeAuthentication}
       />
     </header>
   );
