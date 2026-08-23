@@ -1,9 +1,11 @@
 import { useEffect } from "react";
 import { useState } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
+import { AuthModal } from "./AuthModal";
 
 export const Header = () => {
   const [hidden, setHidden] = useState(true);
+  const [authModalMode, setAuthModalMode] = useState(null);
   const [theme, setTheme] = useState(() => {
     const savedTheme = localStorage.getItem("theme");
     if (savedTheme) return savedTheme;
@@ -19,93 +21,257 @@ export const Header = () => {
   }, [theme]);
 
   const toggleDarkMode = () => {
-    setTheme((currentTheme) => currentTheme === "dark" ? "light" : "dark");
+    setTheme((currentTheme) => (currentTheme === "dark" ? "light" : "dark"));
   };
 
   const toggleTricolorTheme = () => {
-    setTheme((currentTheme) => currentTheme === "tricolor" ? "light" : "tricolor");
+    setTheme((currentTheme) =>
+      currentTheme === "tricolor" ? "light" : "tricolor",
+    );
   };
 
-  const activeClass = "text-base block py-2 px-3 text-white bg-blue-700 rounded lg:bg-transparent lg:text-blue-700 lg:p-0 dark:text-white";
-  const inActiveClass = "text-base block py-2 px-3 text-gray-700 rounded hover:bg-gray-100 lg:hover:bg-transparent lg:hover:text-blue-700 lg:p-0 lg:dark:hover:text-white dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700";
-
+  const activeClass =
+    "text-base block py-2 px-3 text-white bg-blue-700 rounded lg:bg-transparent lg:text-blue-700 lg:p-0 dark:text-white";
+  const inActiveClass =
+    "text-base block py-2 px-3 text-gray-700 rounded hover:bg-gray-100 lg:hover:bg-transparent lg:hover:text-blue-700 lg:p-0 lg:dark:hover:text-white dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700";
   const handleSubmit = (event) => {
     event.preventDefault();
     const queryTerm = event.target.search.value;
     event.target.reset();
     return navigate(`/search?q=${queryTerm}`);
-  }
+  };
 
   return (
-    <header>      
+    <header>
       <nav className="bg-white border-b-2 border-gray-200 px-2 sm:px-4 py-2 dark:bg-gray-900 dark:border-b-1 dark:border-gray-900">
         <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between">
           <Link to="/" className="flex items-center">
-              <img src="/logo.png" className="mr-2 h-8 w-8 sm:h-9 sm:w-9 rounded-full object-cover" alt="Mayur's Logo" />
-              <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">IBM</span>
+            <img
+              src="/logo.png"
+              className="mr-2 h-8 w-8 sm:h-9 sm:w-9 rounded-full object-cover"
+              alt="Mayur's Logo"
+            />
+            <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
+              IBM
+            </span>
           </Link>
 
           <div id="mobile-nav" className="flex lg:order-2">
-          <button onClick={toggleDarkMode} title="Toggle light and dark theme" aria-label="Toggle light and dark theme" type="button" className="flex items-center justify-center p-2 mr-2 min-w-[42px] h-[42px] text-gray-700 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 focus:z-10 focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-500 dark:bg-gray-800 focus:outline-none dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
-            {theme === "dark" ? (
-              <svg aria-hidden="true" className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M10 6a4 4 0 100 8 4 4 0 000-8zm0-4a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm0 13a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zm8-5a1 1 0 01-1 1h-1a1 1 0 110-2h1a1 1 0 011 1zM5 10a1 1 0 01-1 1H3a1 1 0 110-2h1a1 1 0 011 1zm10.657-5.657a1 1 0 010 1.414l-.707.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM6.464 13.536a1 1 0 010 1.414l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 0zm9.193.707a1 1 0 01-1.414 1.414l-.707-.707a1 1 0 011.414-1.414l.707.707zM6.464 5.05A1 1 0 015.05 6.464l-.707-.707a1 1 0 011.414-1.414l.707.707z" /></svg>
-            ) : (
-              <svg aria-hidden="true" className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" /></svg>
-            )}
-          </button>
-          <button onClick={toggleTricolorTheme} title="Toggle Indian tricolor theme" aria-label="Toggle Indian tricolor theme" aria-pressed={theme === "tricolor"} type="button" className="tricolor-toggle flex flex-col overflow-hidden mr-2 w-[42px] h-[42px] rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-800">
-            <span className="flex-1 w-full bg-[#ff9933]"></span>
-            <span className="tricolor-white-band flex-1 w-full bg-white"></span>
-            <span className="flex-1 w-full bg-[#138808]"></span>
-          </button>
-            <button onClick={() => setHidden(!hidden)} type="button" data-collapse-toggle="navbar-search" aria-controls="navbar-search" aria-expanded={!hidden} className="lg:hidden text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5 mr-1">
-              <svg className="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clipRule="evenodd"></path></svg>
+            <button
+              type="button"
+              onClick={() => setAuthModalMode("choice")}
+              className="mr-2 inline-flex h-[42px] items-center rounded-lg bg-blue-700 px-4 text-sm font-medium text-white hover:bg-blue-800"
+            >
+              Sign in
+            </button>
+            <button
+              onClick={toggleDarkMode}
+              title="Toggle light and dark theme"
+              aria-label="Toggle light and dark theme"
+              type="button"
+              className="flex items-center justify-center p-2 mr-2 min-w-[42px] h-[42px] text-gray-700 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 focus:z-10 focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-500 dark:bg-gray-800 focus:outline-none dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+            >
+              {theme === "dark" ? (
+                <svg
+                  aria-hidden="true"
+                  className="w-4 h-4"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path d="M10 6a4 4 0 100 8 4 4 0 000-8zm0-4a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm0 13a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zm8-5a1 1 0 01-1 1h-1a1 1 0 110-2h1a1 1 0 011 1zM5 10a1 1 0 01-1 1H3a1 1 0 110-2h1a1 1 0 011 1zm10.657-5.657a1 1 0 010 1.414l-.707.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM6.464 13.536a1 1 0 010 1.414l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 0zm9.193.707a1 1 0 01-1.414 1.414l-.707-.707a1 1 0 011.414-1.414l.707.707zM6.464 5.05A1 1 0 015.05 6.464l-.707-.707a1 1 0 011.414-1.414l.707.707z" />
+                </svg>
+              ) : (
+                <svg
+                  aria-hidden="true"
+                  className="w-4 h-4"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
+                </svg>
+              )}
+            </button>
+            <button
+              onClick={toggleTricolorTheme}
+              title="Toggle Indian tricolor theme"
+              aria-label="Toggle Indian tricolor theme"
+              aria-pressed={theme === "tricolor"}
+              type="button"
+              className="tricolor-toggle flex flex-col overflow-hidden mr-2 w-[42px] h-[42px] rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-800"
+            >
+              <span className="flex-1 w-full bg-[#ff9933]"></span>
+              <span className="tricolor-white-band flex-1 w-full bg-white"></span>
+              <span className="flex-1 w-full bg-[#138808]"></span>
+            </button>
+            <button
+              onClick={() => setHidden(!hidden)}
+              type="button"
+              data-collapse-toggle="navbar-search"
+              aria-controls="navbar-search"
+              aria-expanded={!hidden}
+              className="lg:hidden text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5 mr-1"
+            >
+              <svg
+                className="w-5 h-5"
+                aria-hidden="true"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                  clipRule="evenodd"
+                ></path>
+              </svg>
               <span className="sr-only">Search</span>
             </button>
             <div className="hidden relative lg:block">
               <div className="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
-                <svg className="w-5 h-5 text-gray-500" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clipRule="evenodd"></path></svg>
+                <svg
+                  className="w-5 h-5 text-gray-500"
+                  aria-hidden="true"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                    clipRule="evenodd"
+                  ></path>
+                </svg>
                 <span className="sr-only">Search icon</span>
               </div>
               <form onSubmit={handleSubmit}>
-                <input type="text" id="search-navbar" name="search" className="block p-2 pl-10 w-full text-gray-900 bg-gray-50 rounded-lg border border-gray-300 sm:text-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search..." autoComplete="off" />
+                <input
+                  type="text"
+                  id="search-navbar"
+                  name="search"
+                  className="block p-2 pl-10 w-full text-gray-900 bg-gray-50 rounded-lg border border-gray-300 sm:text-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  placeholder="Search..."
+                  autoComplete="off"
+                />
               </form>
             </div>
-            <button onClick={() => setHidden(!hidden)} data-collapse-toggle="navbar-search" type="button" className="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg lg:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600" aria-controls="navbar-search" aria-expanded={!hidden}>
+            <button
+              onClick={() => setHidden(!hidden)}
+              data-collapse-toggle="navbar-search"
+              type="button"
+              className="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg lg:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+              aria-controls="navbar-search"
+              aria-expanded={!hidden}
+            >
               <span className="sr-only">Open menu</span>
-              <svg className="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clipRule="evenodd"></path></svg>
+              <svg
+                className="w-6 h-6"
+                aria-hidden="true"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
+                  clipRule="evenodd"
+                ></path>
+              </svg>
             </button>
           </div>
 
-            <div className={`${hidden ? "hidden" : ""} w-full items-center justify-between lg:order-1 lg:flex lg:w-auto`} id="navbar-search">
-              <div className="relative mt-3 lg:hidden">
-                <div className="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
-                  <svg className="w-5 h-5 text-gray-500" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clipRule="evenodd"></path></svg>
-                </div>
-                <form onSubmit={handleSubmit}>
-                  <input type="text" id="search-navbar" name="search" className="block p-2 pl-10 w-full text-gray-900 bg-gray-50 rounded-lg border border-gray-300 sm:text-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search..." autoComplete="off" />
-                </form>
+          <div
+            className={`${hidden ? "hidden" : ""} w-full items-center justify-between lg:order-1 lg:flex lg:w-auto`}
+            id="navbar-search"
+          >
+            <div className="relative mt-3 lg:hidden">
+              <div className="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
+                <svg
+                  className="w-5 h-5 text-gray-500"
+                  aria-hidden="true"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                    clipRule="evenodd"
+                  ></path>
+                </svg>
               </div>
-              <ul className="mt-4 flex flex-col rounded-lg border border-gray-100 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-800 lg:mt-0 lg:flex-row lg:space-x-4 lg:border-0 lg:bg-white lg:p-0 lg:text-sm lg:font-medium lg:dark:bg-gray-900 xl:space-x-8">
-                <li>
-                  <NavLink to="/" className={({isActive}) => isActive ? activeClass : inActiveClass } end>Home</NavLink>
-                </li>
-                <li>
-                  <NavLink to="/movies/popular" className={({isActive}) => isActive ? activeClass : inActiveClass }>Popular</NavLink>
-                </li>
-                <li>
-                  <NavLink to="/movies/top" className={({isActive}) => isActive ? activeClass : inActiveClass }>Top Rated</NavLink>
-                </li>
-                <li>
-                  <NavLink to="/movies/upcoming" className={({isActive}) => isActive ? activeClass : inActiveClass }>Upcoming</NavLink>
-                </li>
-                <li>
-                  <NavLink to="/contact" className={({isActive}) => isActive ? activeClass : inActiveClass }>Contact Us</NavLink>
-                </li>
-              </ul>
+              <form onSubmit={handleSubmit}>
+                <input
+                  type="text"
+                  id="search-navbar"
+                  name="search"
+                  className="block p-2 pl-10 w-full text-gray-900 bg-gray-50 rounded-lg border border-gray-300 sm:text-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  placeholder="Search..."
+                  autoComplete="off"
+                />
+              </form>
             </div>
+            <ul className="mt-4 flex flex-col rounded-lg border border-gray-100 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-800 lg:mt-0 lg:flex-row lg:space-x-4 lg:border-0 lg:bg-white lg:p-0 lg:text-sm lg:font-medium lg:dark:bg-gray-900 xl:space-x-8">
+              <li>
+                <NavLink
+                  to="/"
+                  className={({ isActive }) =>
+                    isActive ? activeClass : inActiveClass
+                  }
+                  end
+                >
+                  Home
+                </NavLink>
+              </li>
+              <li>
+                <NavLink
+                  to="/movies/popular"
+                  className={({ isActive }) =>
+                    isActive ? activeClass : inActiveClass
+                  }
+                >
+                  Popular
+                </NavLink>
+              </li>
+              <li>
+                <NavLink
+                  to="/movies/top"
+                  className={({ isActive }) =>
+                    isActive ? activeClass : inActiveClass
+                  }
+                >
+                  Top Rated
+                </NavLink>
+              </li>
+              <li>
+                <NavLink
+                  to="/movies/upcoming"
+                  className={({ isActive }) =>
+                    isActive ? activeClass : inActiveClass
+                  }
+                >
+                  Upcoming
+                </NavLink>
+              </li>
+              <li>
+                <NavLink
+                  to="/contact"
+                  className={({ isActive }) =>
+                    isActive ? activeClass : inActiveClass
+                  }
+                >
+                  Contact Us
+                </NavLink>
+              </li>
+            </ul>
+          </div>
         </div>
       </nav>
+      <AuthModal
+        mode={authModalMode}
+        onClose={() => setAuthModalMode(null)}
+        onModeChange={setAuthModalMode}
+        onLoginSuccess={() => setAuthModalMode(null)}
+      />
     </header>
-  )
-}
+  );
+};

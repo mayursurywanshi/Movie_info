@@ -11,196 +11,271 @@ input,
 select,
 textarea,
 [role="button"] {
-    cursor: default !important;
+  cursor: default !important;
 }
 
-main{
-    max-width: 1280px;
-    margin: auto;
-    min-height: 90vh;
-    padding: 10px;
-    width: 100%;
+main {
+  max-width: 1280px;
+  margin: auto;
+  min-height: 90vh;
+  padding: 10px;
+  width: 100%;
 }
 
 .movie-card {
-    transition: transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease;
+  transition:
+    transform 200ms ease,
+    box-shadow 200ms ease,
+    border-color 200ms ease;
 }
 
 .movie-card:hover {
-    transform: translateY(-6px);
-    border-color: #93c5fd;
-    box-shadow: 0 14px 28px rgba(15, 23, 42, 0.18);
+  transform: translateY(-6px);
+  border-color: #93c5fd;
+  box-shadow: 0 14px 28px rgba(15, 23, 42, 0.18);
 }
 
 .movie-card-image {
-    aspect-ratio: 2 / 3;
-    height: auto;
+  aspect-ratio: 2 / 3;
+  height: auto;
 }
 
 @media (max-width: 639px) {
-    main {
-        padding: 8px;
-    }
+  main {
+    padding: 8px;
+  }
 
-    .movie-card {
-        max-width: 360px;
-        margin-inline: auto;
-    }
-
+  .movie-card {
+    max-width: 360px;
+    margin-inline: auto;
+  }
 }
 
 @media (hover: none) {
-    .movie-card:hover,
-    .contact-card:hover {
-        transform: none;
-    }
+  .movie-card:hover,
+  .contact-card:hover {
+    transform: none;
+  }
 }
 
 .movie-card-overview {
-    display: -webkit-box;
-    overflow: hidden;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 3;
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
 }
 
 .read-more-button {
-    transition: background-color 150ms ease, transform 150ms ease;
+  transition:
+    background-color 150ms ease,
+    transform 150ms ease;
 }
 
 .read-more-button:hover {
-    transform: translateX(2px);
+  transform: translateX(2px);
 }
 
 .contact-card {
-    transition: transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease;
+  transition:
+    transform 200ms ease,
+    box-shadow 200ms ease,
+    border-color 200ms ease;
 }
 
 .contact-card:hover {
-    transform: translateY(-5px);
-    border-color: #60a5fa;
-    box-shadow: 0 12px 24px rgba(15, 23, 42, 0.14);
+  transform: translateY(-5px);
+  border-color: #60a5fa;
+  box-shadow: 0 12px 24px rgba(15, 23, 42, 0.14);
 }
 
 .indian-flag {
-    display: inline-flex;
-    flex: 0 0 auto;
-    flex-direction: column;
-    width: 28px;
-    height: 18px;
-    overflow: hidden;
-    border: 1px solid rgba(15, 23, 42, 0.2);
-    border-radius: 2px;
+  display: inline-flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  width: 28px;
+  height: 18px;
+  overflow: hidden;
+  border: 1px solid rgba(15, 23, 42, 0.2);
+  border-radius: 2px;
 }
 
 .indian-flag > span {
-    flex: 1;
-    width: 100%;
+  flex: 1;
+  width: 100%;
 }
 
 .indian-flag > span:first-child {
-    background: #ff9933;
+  background: #ff9933;
 }
 
 .indian-flag > span:nth-child(2) {
-    position: relative;
-    background: #ffffff;
+  position: relative;
+  background: #ffffff;
 }
 
 .indian-flag > span:nth-child(2)::after {
-    content: "";
-    position: absolute;
-    width: 6px;
-    height: 6px;
-    left: 50%;
-    top: 50%;
-    border: 1px solid #000080;
-    border-radius: 50%;
-    transform: translate(-50%, -50%);
+  content: "";
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  left: 50%;
+  top: 50%;
+  border: 1px solid #000080;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .indian-flag > span:last-child {
-    background: #138808;
+  background: #138808;
 }
 
 /* Indian tricolor theme */
 .tricolor body {
-    color: #1f2937;
-    background: linear-gradient(to top left, rgba(255, 153, 51, 0.2) 0 30%, #ffffff 48% 62%, rgba(19, 136, 8, 0.18) 80% 100%);
-    background-attachment: fixed;
+  color: #1f2937;
+  background: linear-gradient(
+    to top left,
+    rgba(255, 153, 51, 0.2) 0 30%,
+    #ffffff 48% 62%,
+    rgba(19, 136, 8, 0.18) 80% 100%
+  );
+  background-attachment: fixed;
 }
 
 .tricolor nav {
-    background: linear-gradient(to top left, rgba(255, 153, 51, 0.25), #ffffff 50%, rgba(19, 136, 8, 0.22));
-    border-bottom-color: #000080;
+  background: linear-gradient(
+    to top left,
+    rgba(255, 153, 51, 0.25),
+    #ffffff 50%,
+    rgba(19, 136, 8, 0.22)
+  );
+  border-bottom-color: #000080;
 }
 
 .tricolor nav a[aria-current="page"] {
-    color: #000080;
+  color: #000080;
 }
 
 .tricolor .movie-card {
-    background: linear-gradient(to top left, rgba(214, 128, 43, 0.36), rgba(245, 245, 245, 0.98) 50%, rgba(16, 114, 7, 0.32));
-    border-color: rgba(0, 0, 108, 0.45);
-    box-shadow: 0 4px 12px rgba(0, 0, 108, 0.2);
+  background: linear-gradient(
+    to top left,
+    rgba(214, 128, 43, 0.36),
+    rgba(245, 245, 245, 0.98) 50%,
+    rgba(16, 114, 7, 0.32)
+  );
+  border-color: rgba(0, 0, 108, 0.45);
+  box-shadow: 0 4px 12px rgba(0, 0, 108, 0.2);
 }
 
 .tricolor .movie-card h5 {
-    color: #00006b;
+  color: #00006b;
 }
 
 .tricolor .movie-card p {
-    color: #374151;
+  color: #374151;
 }
 
 .tricolor .read-more-button {
-    color: #ffffff;
-    background: #00006b;
+  color: #ffffff;
+  background: #00006b;
 }
 
 .tricolor .read-more-button:hover {
-    background: #138808;
+  background: #138808;
 }
 
 .tricolor .contact-page > section,
 .tricolor .contact-card {
-    background: linear-gradient(to top left, rgba(214, 128, 43, 0.2), rgba(255, 255, 255, 0.98) 50%, rgba(16, 114, 7, 0.18));
-    border-color: rgba(0, 0, 108, 0.35);
+  background: linear-gradient(
+    to top left,
+    rgba(214, 128, 43, 0.2),
+    rgba(255, 255, 255, 0.98) 50%,
+    rgba(16, 114, 7, 0.18)
+  );
+  border-color: rgba(0, 0, 108, 0.35);
 }
 
 .tricolor .contact-page h1,
 .tricolor .contact-page h2,
 .tricolor .contact-page > section > div > p:first-child {
-    color: #00006b;
+  color: #00006b;
 }
 
 .tricolor .pagination button[aria-current="page"] {
-    color: #ffffff;
-    background: #00006b;
-    border-color: #00006b;
+  color: #ffffff;
+  background: #00006b;
+  border-color: #00006b;
 }
 
 .tricolor .tricolor-toggle {
-    border-color: #000080;
-    box-shadow: 0 0 0 2px rgba(0, 0, 128, 0.2);
+  border-color: #000080;
+  box-shadow: 0 0 0 2px rgba(0, 0, 128, 0.2);
 }
 
 .tricolor-white-band {
-    position: relative;
+  position: relative;
 }
 
 .tricolor-white-band::after {
-    content: "";
-    position: absolute;
-    width: 8px;
-    height: 8px;
-    left: 50%;
-    top: 50%;
-    border: 1px solid #000080;
-    border-radius: 50%;
-    transform: translate(-50%, -50%);
+  content: "";
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  left: 50%;
+  top: 50%;
+  border: 1px solid #000080;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .tricolor footer {
-    background: linear-gradient(to top left, rgba(255, 153, 51, 0.22), #ffffff 50%, rgba(19, 136, 8, 0.2));
-    border-top: 1px solid rgba(0, 0, 128, 0.25);
+  background: linear-gradient(
+    to top left,
+    rgba(255, 153, 51, 0.22),
+    #ffffff 50%,
+    rgba(19, 136, 8, 0.2)
+  );
+  border-top: 1px solid rgba(0, 0, 128, 0.25);
+}
+
+.tricolor .auth-hero,
+.tricolor .auth-panel {
+  border: 1px solid rgba(0, 0, 108, 0.35);
+}
+.tricolor .auth-hero {
+  color: #00006b;
+  background: linear-gradient(
+    to bottom right,
+    rgba(255, 153, 51, 0.92),
+    rgba(255, 255, 255, 0.96) 50%,
+    rgba(19, 136, 8, 0.88)
+  );
+}
+.tricolor .auth-hero p {
+  color: #1f2937;
+}
+.tricolor .auth-panel {
+  background: linear-gradient(
+    to bottom left,
+    rgba(255, 153, 51, 0.12),
+    #ffffff 50%,
+    rgba(19, 136, 8, 0.12)
+  );
+}
+.tricolor .auth-tabs {
+  background: rgba(0, 0, 108, 0.08);
+}
+.tricolor .auth-input {
+  color: #1f2937;
+  border-color: rgba(0, 0, 108, 0.35);
+  background: rgba(255, 255, 255, 0.9);
+}
+.tricolor .auth-submit {
+  background: #00006b;
+}
+.tricolor .auth-submit:hover {
+  background: #138808;
+}
+.tricolor .auth-modal-panel {
+  border-color: rgba(0, 0, 108, 0.35);
+  background: linear-gradient(135deg, rgba(255, 153, 51, 0.1), rgba(255, 255, 255, 0.96) 48%, rgba(19, 136, 8, 0.1));
 }
