@@ -1,13 +1,6 @@
 const { Pool } = require("pg");
 
-const requiredEnvironmentVariables = [
-  "DB_HOST",
-  "DB_PORT",
-  "DB_NAME",
-  "DB_USER",
-  "DB_PASSWORD",
-];
-
+const requiredEnvironmentVariables = ["DB_HOST", "DB_PORT", "DB_NAME", "DB_USER", "DB_PASSWORD"];
 const missingEnvironmentVariables = requiredEnvironmentVariables.filter(
   (variable) => !process.env[variable]
 );

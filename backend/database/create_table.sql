@@ -1,0 +1,14 @@
+CREATE TABLE IF NOT EXISTS user_details (
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    username VARCHAR(50) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE UNIQUE INDEX IF NOT EXISTS user_details_username_unique
+ON user_details (LOWER(username));
+
+CREATE UNIQUE INDEX IF NOT EXISTS user_details_email_unique
+ON user_details (LOWER(email));
