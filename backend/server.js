@@ -7,6 +7,8 @@ const express = require("express");
 const pool = require("./config/database");
 const signupRoutes = require("./modules/signup/routes");
 const loginRoutes = require("./modules/login/routes");
+const profileRoutes = require("./modules/profile/routes");
+const favoritesRoutes = require("./modules/favorites/routes");
 
 const app = express();
 const port = Number(process.env.SERVER_PORT) || 5000;
@@ -15,6 +17,8 @@ app.use(cors({ origin: process.env.CLIENT_ORIGIN || "http://localhost:3000" }));
 app.use(express.json());
 app.use("/api/users", signupRoutes);
 app.use("/api/users", loginRoutes);
+app.use("/api/users", profileRoutes);
+app.use("/api/users", favoritesRoutes);
 
 app.get("/api/health", (request, response) => {
   response.json({ status: "ok", message: "Movie Info API is running" });

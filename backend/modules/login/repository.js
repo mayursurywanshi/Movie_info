@@ -3,7 +3,15 @@ const pool = require("../../config/database");
 async function findUserByIdentifier(identifier) {
   const result = await pool.query(
     `
-      SELECT id, username, email, password_hash, created_at
+      SELECT
+        id,
+        username,
+        display_name,
+        email,
+        password_hash,
+        profile_picture IS NOT NULL AS has_profile_picture,
+        profile_picture_updated_at,
+        created_at
       FROM user_details
       WHERE LOWER(username) = LOWER($1)
          OR LOWER(email) = LOWER($1)

@@ -65,7 +65,10 @@ async function login({ identifier, password, ipAddress, userAgent }) {
     user: {
       id: user.id,
       username: user.username,
+      display_name: user.display_name,
       email: user.email,
+      has_profile_picture: user.has_profile_picture,
+      profile_picture_updated_at: user.profile_picture_updated_at,
       created_at: user.created_at,
     },
     session: {

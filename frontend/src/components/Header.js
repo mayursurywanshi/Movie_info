@@ -2,7 +2,10 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { AuthModal } from "./AuthModal";
-import { getAuthentication } from "../services/authStorage";
+import { ProfileDropdown } from "./profile/ProfileDropdown";
+import { useProfilePicture } from "../hooks/useProfilePicture";
+import { clearAuthentication, getAuthentication } from "../services/authStorage";
+import { logoutUser } from "../services/profileApi";
 
 const authPaths = {
   choice: "/account",
@@ -28,10 +31,7 @@ export const Header = () => {
   const navigate = useNavigate();
   const authModalMode = authModes[location.pathname] || null;
   const authenticatedUser = authentication?.user;
-  const profileInitial =
-    authenticatedUser?.username?.trim().charAt(0).toUpperCase() ||
-    authenticatedUser?.email?.trim().charAt(0).toUpperCase() ||
-    "U";
+  const profilePictureUrl = useProfilePicture(authenticatedUser);
 
   useEffect(() => {
     localStorage.setItem("theme", theme);
@@ -55,6 +55,10 @@ export const Header = () => {
     };
   }, [location.pathname]);
 
+  useEffect(() => {
+    setHidden(true);
+  }, [location.pathname, location.search]);
+
   const toggleDarkMode = () => {
     setTheme((currentTheme) => (currentTheme === "dark" ? "light" : "dark"));
   };
@@ -71,10 +75,13 @@ export const Header = () => {
     "text-base block py-2 px-3 text-gray-700 rounded hover:bg-gray-100 lg:hover:bg-transparent lg:hover:text-blue-700 lg:p-0 lg:dark:hover:text-white dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700";
   const handleSubmit = (event) => {
     event.preventDefault();
-    const queryTerm = event.target.search.value;
+    const queryTerm = event.target.search.value.trim();
     event.target.reset();
-    return navigate(`/search?q=${queryTerm}`);
+    setHidden(true);
+    if (queryTerm) return navigate(`/search?q=${encodeURIComponent(queryTerm)}`);
   };
+
+  const closeMobileMenu = () => setHidden(true);
 
   const openAuthentication = () => {
     navigate(authPaths.choice, {
@@ -95,22 +102,42 @@ export const Header = () => {
     navigate(location.state?.backgroundPath || "/", { replace: true });
   };
 
+  const completeAuthentication = () => {
+    navigate(
+      location.state?.returnPath || location.state?.backgroundPath || "/",
+      { replace: true },
+    );
+  };
+
+  const handleLogout = async () => {
+    try {
+      await logoutUser();
+    } catch (error) {
+      // Local authentication is cleared even if the session already expired.
+    } finally {
+      clearAuthentication();
+      navigate("/", { replace: true });
+    }
+  };
+
   return (
     <header>
       <nav className="bg-white border-b-2 border-gray-200 px-2 sm:px-4 py-2 dark:bg-gray-900 dark:border-b-1 dark:border-gray-900">
         <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between">
-          <Link to="/" className="flex items-center">
+          <Link to="/" className="flex min-w-0 shrink-0 items-center">
             <img
               src="/logo.png"
-              className="mr-2 h-8 w-8 sm:h-9 sm:w-9 rounded-full object-cover"
+              width="36"
+              height="36"
+              className="h-8 w-8 rounded-full object-cover sm:mr-2 sm:h-9 sm:w-9"
               alt="Mayur's Logo"
             />
-            <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
+            <span className="hidden self-center whitespace-nowrap text-2xl font-semibold dark:text-white sm:inline">
               IBM
             </span>
           </Link>
 
-          <div id="mobile-nav" className="flex lg:order-2">
+          <div id="mobile-nav" className="flex min-w-0 items-center lg:order-2">
             <button
               onClick={toggleDarkMode}
               title="Toggle light and dark theme"
@@ -149,29 +176,6 @@ export const Header = () => {
               <span className="flex-1 w-full bg-[#ff9933]"></span>
               <span className="tricolor-white-band flex-1 w-full bg-white"></span>
               <span className="flex-1 w-full bg-[#138808]"></span>
-            </button>
-            <button
-              onClick={() => setHidden(!hidden)}
-              type="button"
-              data-collapse-toggle="navbar-search"
-              aria-controls="navbar-search"
-              aria-expanded={!hidden}
-              className="lg:hidden text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5 mr-1"
-            >
-              <svg
-                className="w-5 h-5"
-                aria-hidden="true"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                  clipRule="evenodd"
-                ></path>
-              </svg>
-              <span className="sr-only">Search</span>
             </button>
             <div className="hidden relative lg:block">
               <div className="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
@@ -225,18 +229,7 @@ export const Header = () => {
               </svg>
             </button>
             {authenticatedUser ? (
-              <button
-                type="button"
-                className="ml-2 inline-flex h-[42px] items-center gap-2 rounded-lg border border-gray-200 bg-white px-2.5 text-sm font-medium text-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700 sm:px-3"
-              >
-                <span
-                  className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-700 font-semibold text-white"
-                  aria-hidden="true"
-                >
-                  {profileInitial}
-                </span>
-                <span className="hidden sm:inline">My Profile</span>
-              </button>
+              <ProfileDropdown user={authenticatedUser} pictureUrl={profilePictureUrl} onLogout={handleLogout} />
             ) : (
               <button
                 type="button"
@@ -283,6 +276,7 @@ export const Header = () => {
               <li>
                 <NavLink
                   to="/"
+                  onClick={closeMobileMenu}
                   className={({ isActive }) =>
                     isActive ? activeClass : inActiveClass
                   }
@@ -294,6 +288,7 @@ export const Header = () => {
               <li>
                 <NavLink
                   to="/movies/popular"
+                  onClick={closeMobileMenu}
                   className={({ isActive }) =>
                     isActive ? activeClass : inActiveClass
                   }
@@ -304,6 +299,7 @@ export const Header = () => {
               <li>
                 <NavLink
                   to="/movies/top"
+                  onClick={closeMobileMenu}
                   className={({ isActive }) =>
                     isActive ? activeClass : inActiveClass
                   }
@@ -314,6 +310,7 @@ export const Header = () => {
               <li>
                 <NavLink
                   to="/movies/upcoming"
+                  onClick={closeMobileMenu}
                   className={({ isActive }) =>
                     isActive ? activeClass : inActiveClass
                   }
@@ -324,6 +321,7 @@ export const Header = () => {
               <li>
                 <NavLink
                   to="/contact"
+                  onClick={closeMobileMenu}
                   className={({ isActive }) =>
                     isActive ? activeClass : inActiveClass
                   }
@@ -340,7 +338,7 @@ export const Header = () => {
         message={location.state?.authMessage || ""}
         onClose={closeAuthentication}
         onModeChange={changeAuthenticationMode}
-        onLoginSuccess={closeAuthentication}
+        onLoginSuccess={completeAuthentication}
       />
     </header>
   );

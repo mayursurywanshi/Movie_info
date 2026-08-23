@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useTitle } from "../hooks/useTitle";
+import { FavoriteButton } from "../components";
 import Backup from "../assets/images/backup.png"
 
 export const MovieDetail = () => {
@@ -11,7 +12,8 @@ export const MovieDetail = () => {
   //eslint-disable-next-line
   const pageTitle = useTitle(movie.title);
 
-  const image = movie.poster_path ? `https://image.tmdb.org/t/p/w500/${movie.poster_path}` : Backup ;
+  const image = movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : Backup ;
+  const imdbId = typeof movie.imdb_id === "string" ? movie.imdb_id.trim() : "";
 
   useEffect(() => {
     async function fetchMovie(){
@@ -53,10 +55,13 @@ export const MovieDetail = () => {
     <main>
       <section className="grid gap-6 px-1 py-5 sm:px-4 lg:grid-cols-[minmax(260px,360px)_minmax(0,1fr)] lg:items-start lg:gap-10">
         <div className="mx-auto w-full max-w-sm">
-          <img className="h-auto w-full rounded-lg shadow-md" src={image} alt={movie.title} />
+          <img className="h-auto w-full rounded-lg shadow-md" src={image} alt={movie.title} width="500" height="750" loading="eager" fetchpriority="high" decoding="async" />
         </div>
         <div className="w-full min-w-0 text-left text-base text-gray-700 dark:text-white sm:text-lg">
-          <h1 className="my-3 text-center text-3xl font-bold sm:text-4xl lg:text-left">{movie.title}</h1>
+          <div className="my-3 flex flex-col items-center gap-4 sm:flex-row sm:justify-between lg:items-start">
+            <h1 className="text-center text-3xl font-bold sm:text-4xl lg:text-left">{movie.title}</h1>
+            <FavoriteButton movie={movie} />
+          </div>
           <p className="my-4 leading-relaxed">{movie.overview}</p>
             { movie.genres ? (
               <p className="my-7 flex flex-wrap gap-2">
@@ -94,10 +99,14 @@ export const MovieDetail = () => {
               <span>{movie.release_date}</span>
             </p>
 
-            <p className="my-4">
-              <span className="mr-2 font-bold">IMDB Code:</span>
-              <a href={`https://www.imdb.com/title/${movie.imdb_id}`} target="_blank" rel="noreferrer">{movie.imdb_id}</a>
-            </p>
+            {imdbId && (
+              <a href={`https://www.imdb.com/title/${imdbId}/videogallery/`} target="_blank" rel="noreferrer" className="mt-5 inline-flex items-center gap-2 rounded-lg bg-red-600 px-5 py-3 font-medium text-white hover:bg-red-700">
+                <svg className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path d="M8 5v14l11-7z" />
+                </svg>
+                Watch Trailer
+              </a>
+            )}
           </div>
 
         </div>

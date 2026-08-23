@@ -1,15 +1,19 @@
 import { Link } from "react-router-dom";
 import Backup from "../assets/images/backup.png"
+import { FavoriteButton } from "./FavoriteButton";
 
-export const Card = ({movie}) => {
+export const Card = ({movie, priority = false}) => {
   const {id, original_title, overview, poster_path} = movie;
-  const image = poster_path ? `https://image.tmdb.org/t/p/w500/${poster_path}` : Backup ;
+  const image = poster_path ? `https://image.tmdb.org/t/p/w342${poster_path}` : Backup ;
 
   return (
     <article className="movie-card flex h-full w-full flex-col overflow-hidden rounded-lg border border-gray-200 bg-white shadow-md dark:border-gray-700 dark:bg-gray-800">
-        <Link to={`/movie/${id}`}>
-            <img className="movie-card-image aspect-[2/3] w-full bg-gray-100 object-contain dark:bg-gray-900" src={image} alt={`${original_title} poster`} />
-        </Link>
+        <div className="relative">
+          <Link to={`/movie/${id}`}>
+              <img className="movie-card-image aspect-[2/3] w-full bg-gray-100 object-cover dark:bg-gray-900" src={image} alt={`${original_title} poster`} width="342" height="513" loading={priority ? "eager" : "lazy"} fetchpriority={priority ? "high" : "auto"} decoding="async" />
+          </Link>
+          <FavoriteButton movie={movie} compact />
+        </div>
         <div className="flex flex-col flex-1 p-4">
             <Link to={`/movie/${id}`}>
                 <h5 className="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">{original_title}</h5>

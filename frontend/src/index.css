@@ -2,6 +2,24 @@
 @tailwind components;
 @tailwind utilities;
 
+html,
+body,
+#root {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+img,
+video,
+iframe {
+  max-width: 100%;
+}
+
 /* Keep a consistent cursor across interactive elements and hover states. */
 html,
 body,
@@ -23,6 +41,8 @@ main {
 }
 
 .movie-card {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 620px;
   transition:
     transform 200ms ease,
     box-shadow 200ms ease,
@@ -276,6 +296,12 @@ main {
   background: #138808;
 }
 .tricolor .auth-modal-panel {
+  border-color: rgba(0, 0, 108, 0.35);
+  background: linear-gradient(135deg, rgba(255, 153, 51, 0.1), rgba(255, 255, 255, 0.96) 48%, rgba(19, 136, 8, 0.1));
+}
+
+.tricolor .profile-page aside,
+.tricolor .profile-page section {
   border-color: rgba(0, 0, 108, 0.35);
   background: linear-gradient(135deg, rgba(255, 153, 51, 0.1), rgba(255, 255, 255, 0.96) 48%, rgba(19, 136, 8, 0.1));
 }

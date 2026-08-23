@@ -47,3 +47,21 @@ export function storeAuthentication(result, rememberMe = false) {
   storage.setItem("cinemate_session", JSON.stringify(result.session));
   window.dispatchEvent(new Event("cinemate-auth-changed"));
 }
+
+export function updateStoredUser(user) {
+  const storage = localStorage.getItem("cinemate_token")
+    ? localStorage
+    : sessionStorage.getItem("cinemate_token")
+      ? sessionStorage
+      : null;
+
+  if (!storage) return;
+  storage.setItem("cinemate_user", JSON.stringify(user));
+  window.dispatchEvent(new Event("cinemate-auth-changed"));
+}
+
+export function clearAuthentication() {
+  clearStorage(localStorage);
+  clearStorage(sessionStorage);
+  window.dispatchEvent(new Event("cinemate-auth-changed"));
+}

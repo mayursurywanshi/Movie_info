@@ -1,22 +1,3 @@
-CREATE TABLE IF NOT EXISTS user_details (
-    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    username VARCHAR(50) NOT NULL,
-    display_name VARCHAR(80) NOT NULL,
-    email VARCHAR(255) NOT NULL,
-    password_hash VARCHAR(255) NOT NULL,
-    profile_picture BYTEA,
-    profile_picture_mime_type VARCHAR(50),
-    profile_picture_updated_at TIMESTAMPTZ,
-    created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
-);
-
-CREATE UNIQUE INDEX IF NOT EXISTS user_details_username_unique
-ON user_details (LOWER(username));
-
-CREATE UNIQUE INDEX IF NOT EXISTS user_details_email_unique
-ON user_details (LOWER(email));
-
 CREATE TABLE IF NOT EXISTS user_favorites (
     id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     user_id BIGINT NOT NULL,
