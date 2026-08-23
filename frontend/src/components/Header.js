@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { AuthModal } from "./AuthModal";
+import { getAuthentication } from "../services/authStorage";
 
 const authPaths = {
   choice: "/account",
@@ -15,6 +16,9 @@ const authModes = Object.fromEntries(
 
 export const Header = () => {
   const [hidden, setHidden] = useState(true);
+  const [authentication, setAuthentication] = useState(() =>
+    getAuthentication(),
+  );
   const [theme, setTheme] = useState(() => {
     const savedTheme = localStorage.getItem("theme");
     if (savedTheme) return savedTheme;
@@ -23,6 +27,11 @@ export const Header = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const authModalMode = authModes[location.pathname] || null;
+  const authenticatedUser = authentication?.user;
+  const profileInitial =
+    authenticatedUser?.username?.trim().charAt(0).toUpperCase() ||
+    authenticatedUser?.email?.trim().charAt(0).toUpperCase() ||
+    "U";
 
   useEffect(() => {
     localStorage.setItem("theme", theme);
@@ -30,6 +39,21 @@ export const Header = () => {
     document.documentElement.classList.toggle("dark", theme === "dark");
     document.documentElement.classList.toggle("tricolor", theme === "tricolor");
   }, [theme]);
+
+  useEffect(() => {
+    const refreshAuthentication = () => {
+      setAuthentication(getAuthentication());
+    };
+
+    refreshAuthentication();
+    window.addEventListener("cinemate-auth-changed", refreshAuthentication);
+    window.addEventListener("storage", refreshAuthentication);
+
+    return () => {
+      window.removeEventListener("cinemate-auth-changed", refreshAuthentication);
+      window.removeEventListener("storage", refreshAuthentication);
+    };
+  }, [location.pathname]);
 
   const toggleDarkMode = () => {
     setTheme((currentTheme) => (currentTheme === "dark" ? "light" : "dark"));
@@ -87,13 +111,6 @@ export const Header = () => {
           </Link>
 
           <div id="mobile-nav" className="flex lg:order-2">
-            <button
-              type="button"
-              onClick={openAuthentication}
-              className="mr-2 inline-flex h-[42px] items-center rounded-lg bg-blue-700 px-4 text-sm font-medium text-white hover:bg-blue-800"
-            >
-              Sign in
-            </button>
             <button
               onClick={toggleDarkMode}
               title="Toggle light and dark theme"
@@ -207,6 +224,28 @@ export const Header = () => {
                 ></path>
               </svg>
             </button>
+            {authenticatedUser ? (
+              <button
+                type="button"
+                className="ml-2 inline-flex h-[42px] items-center gap-2 rounded-lg border border-gray-200 bg-white px-2.5 text-sm font-medium text-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700 sm:px-3"
+              >
+                <span
+                  className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-700 font-semibold text-white"
+                  aria-hidden="true"
+                >
+                  {profileInitial}
+                </span>
+                <span className="hidden sm:inline">My Profile</span>
+              </button>
+            ) : (
+              <button
+                type="button"
+                onClick={openAuthentication}
+                className="ml-2 inline-flex h-[42px] items-center rounded-lg bg-blue-700 px-4 text-sm font-medium text-white hover:bg-blue-800"
+              >
+                Sign in
+              </button>
+            )}
           </div>
 
           <div
