@@ -79,4 +79,29 @@ async function logout(request, response) {
   }
 }
 
-module.exports = { getProfile, updateName, updatePicture, getPicture, logout };
+async function changePassword(request, response) {
+  try {
+    const result = await profileService.changePassword({
+      userId: request.auth.userId,
+      ...request.validatedBody,
+    });
+
+    if (result.status === "not_found") {
+      return response.status(404).json({ status: "error", message: "User profile not found" });
+    }
+
+    if (result.status === "invalid_password") {
+      return response.status(400).json({ status: "error", message: "Current password is incorrect" });
+    }
+
+    return response.json({
+      status: "success",
+      message: "Password changed successfully. Please log in again.",
+    });
+  } catch (error) {
+    console.error("Change password failed:", error.message);
+    return response.status(500).json({ status: "error", message: "Unable to change password" });
+  }
+}
+
+module.exports = { getProfile, updateName, updatePicture, getPicture, logout, changePassword };

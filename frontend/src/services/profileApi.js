@@ -41,6 +41,14 @@ export function updateProfileName(displayName) {
   });
 }
 
+export function changeProfilePassword(passwords) {
+  return jsonRequest("/api/users/profile/password", {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(passwords),
+  });
+}
+
 export function uploadProfilePicture(file) {
   const body = new FormData();
   body.append("profile_picture", file);

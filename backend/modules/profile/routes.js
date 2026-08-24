@@ -13,6 +13,12 @@ router.patch(
   profileValidator.validateDisplayName,
   profileController.updateName
 );
+router.patch(
+  "/profile/password",
+  authenticate,
+  profileValidator.validatePasswordChange,
+  profileController.changePassword
+);
 router.put(
   "/profile/picture",
   authenticate,

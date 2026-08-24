@@ -14,6 +14,7 @@ export const ProfileSidebar = ({ collapsed, onToggle }) => {
         <Link to="/" className="block rounded-lg px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-800">{collapsed ? "⌂" : "Home"}</Link>
         <NavLink to="/profile/picture" className={linkClass}>{collapsed ? "◉" : "Update profile picture"}</NavLink>
         <NavLink to="/profile/name" className={linkClass}>{collapsed ? "Aa" : "Update name"}</NavLink>
+        <NavLink to="/profile/password" className={linkClass}>{collapsed ? "•••" : "Change password"}</NavLink>
       </nav>
     </aside>
   );

@@ -32,6 +32,16 @@ async function findProfile(userId) {
   return result.rows[0] || null;
 }
 
+async function findPasswordHash(userId) {
+  const result = await pool.query(
+    `SELECT password_hash
+     FROM user_details
+     WHERE id = $1`,
+    [userId]
+  );
+  return result.rows[0] || null;
+}
+
 async function updateDisplayName({ userId, displayName }) {
   const result = await pool.query(
     `UPDATE user_details
@@ -89,11 +99,49 @@ async function logout({ userId, tokenId }) {
   return result.rows[0] || null;
 }
 
+async function updatePasswordAndCloseSessions({ userId, passwordHash }) {
+  const client = await pool.connect();
+
+  try {
+    await client.query("BEGIN");
+    const result = await client.query(
+      `UPDATE user_details
+       SET password_hash = $2,
+           updated_at = CURRENT_TIMESTAMP
+       WHERE id = $1
+       RETURNING id`,
+      [userId, passwordHash]
+    );
+
+    if (!result.rows[0]) {
+      await client.query("ROLLBACK");
+      return null;
+    }
+
+    await client.query(
+      `UPDATE user_login_details
+       SET logout_at = CURRENT_TIMESTAMP
+       WHERE user_id = $1
+         AND logout_at IS NULL`,
+      [userId]
+    );
+    await client.query("COMMIT");
+    return result.rows[0];
+  } catch (error) {
+    await client.query("ROLLBACK");
+    throw error;
+  } finally {
+    client.release();
+  }
+}
+
 module.exports = {
   findActiveSession,
   findProfile,
+  findPasswordHash,
   updateDisplayName,
   updateProfilePicture,
   findProfilePicture,
   logout,
+  updatePasswordAndCloseSessions,
 };

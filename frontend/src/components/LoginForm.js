@@ -42,9 +42,8 @@ export const LoginForm = ({ onSuccess, successMessage = "" }) => {
       <input id="login-identifier" name="identifier" value={form.identifier} onChange={updateField} autoComplete="username" placeholder="Enter your username or email" required className="auth-input mb-5 block w-full rounded-lg border border-gray-300 bg-white px-3 py-3 text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white" />
       <PasswordField id="login-password" value={form.password} onChange={updateField} autoComplete="current-password" placeholder="Enter your password" />
 
-      <div className="my-5 flex items-center justify-between gap-3 text-sm">
+      <div className="my-5 flex items-center text-sm">
         <label className="flex items-center gap-2 text-gray-600 dark:text-gray-300"><input type="checkbox" checked={rememberMe} onChange={(event) => setRememberMe(event.target.checked)} />Remember me</label>
-        <span className="text-gray-400">Forgot password?</span>
       </div>
 
       {error && <p className="mb-4 text-sm text-red-600 dark:text-red-400" role="alert">{error}</p>}

@@ -13,6 +13,7 @@ const Contact = lazyPage(() => import("../pages/Contact"), "Contact");
 const Favorites = lazyPage(() => import("../pages/Favorites"), "Favorites");
 const ProfileHome = lazyPage(() => import("../pages/profile/ProfileHome"), "ProfileHome");
 const UpdateName = lazyPage(() => import("../pages/profile/UpdateName"), "UpdateName");
+const ChangePassword = lazyPage(() => import("../pages/profile/ChangePassword"), "ChangePassword");
 const UpdateProfilePicture = lazyPage(
   () => import("../pages/profile/UpdateProfilePicture"),
   "UpdateProfilePicture",
@@ -52,6 +53,7 @@ export const AllRoutes = () => {
             <Route index element={<ProfileHome />} />
             <Route path="picture" element={<UpdateProfilePicture />} />
             <Route path="name" element={<UpdateName />} />
+            <Route path="password" element={<ChangePassword />} />
           </Route>
           <Route path="favorites" element={<RequireAuthentication><Favorites /></RequireAuthentication>} />
           <Route path="*" element={<PageNotFound />} />
