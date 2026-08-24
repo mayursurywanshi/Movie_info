@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useFavorites } from "../context/FavoritesContext";
 import { getAuthentication } from "../services/authStorage";
 
-export const FavoriteButton = ({ movie, compact = false }) => {
+export const FavoriteButton = ({ movie, compact = false, hideForGuests = false }) => {
   const [updating, setUpdating] = useState(false);
   const [error, setError] = useState("");
   const { favoriteMovieIds, loading, addMovie, removeMovie } = useFavorites();
@@ -12,6 +12,8 @@ export const FavoriteButton = ({ movie, compact = false }) => {
   const isFavorite = favoriteMovieIds.has(String(movie.id));
   const movieTitle = movie.title || movie.original_title || "movie";
   const busy = loading || updating;
+
+  if (hideForGuests && !getAuthentication()) return null;
 
   const toggleFavorite = async () => {
     if (!getAuthentication()) {

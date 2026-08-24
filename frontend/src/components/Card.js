@@ -13,7 +13,7 @@ export const Card = ({movie, priority = false}) => {
           <Link to={`/movie/${id}`} aria-label={`View details for ${movieTitle}`}>
               <img className="movie-card-image aspect-[2/3] w-full bg-gray-100 object-cover dark:bg-gray-900" src={image} alt={`${movieTitle} poster`} width="342" height="513" loading={priority ? "eager" : "lazy"} fetchpriority={priority ? "high" : "auto"} decoding="async" />
           </Link>
-          <FavoriteButton movie={movie} compact />
+          <FavoriteButton movie={movie} compact hideForGuests />
         </div>
         <div className="flex flex-col flex-1 p-4">
             <Link to={`/movie/${id}`} aria-label={`View details for ${movieTitle}`}>
